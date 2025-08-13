@@ -12,12 +12,14 @@ Pane {
         opacity: 0.5
     }
 
+    signal startPlay()
+
     ColumnLayout {
 
 
         Label {
             id: greetings
-            text: "Welcome to Diego's Naval Battle"
+            text: "Welcome to Diego's Battleship Game"
 
         }
 
@@ -35,6 +37,7 @@ Pane {
             onClicked: {
                 console.log("Game starting..")
                 root.visible = !root.visible
+                root.startPlay()
             }
 
         }

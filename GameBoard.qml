@@ -33,7 +33,6 @@ Pane {
     property var cells: ({})
 
     function swithAttackingMode(){
-        //var keys = Object.keys(shipsPositions)
         for(var key in shipsPositions){
             console.log("key -> " + key)
             if (shipsPositions[key].color.toString() !== "#00000000"){

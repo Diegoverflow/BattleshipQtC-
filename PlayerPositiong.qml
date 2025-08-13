@@ -17,7 +17,11 @@ Pane {
     property var selectedShip
     property int totNumOfPieces: 11
         //aircraftCarrier.numOfPieces + battleship.numOfPieces + cruiser.numOfPieces + destroyer.numOfPieces + submarine.numOfPieces
+
+    property var boardOfPositioning
     
+
+    signal positioningDone()
 
     component Line: Rectangle {
         height: 2
@@ -219,6 +223,7 @@ Pane {
                     onClicked: {
                         console.log("Save")
                         gameBoard.swithAttackingMode()
+                        root.positioningDone()
                     }
 
                 }
@@ -265,6 +270,10 @@ Pane {
 
             onPositionError: (error) => {
                 messages.text = error
+            }
+
+            Component.onCompleted: {
+                root.boardOfPositioning = gameBoard
             }
 
 

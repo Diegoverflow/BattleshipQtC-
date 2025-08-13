@@ -15,7 +15,11 @@ ApplicationWindow {
 
     GameIntro{
         id: gameIntro
-        visible: false
+
+        onStartPlay: {
+            positioning1.visible = true
+        }
+
     }
 
     // GameBoard{
@@ -25,8 +29,26 @@ ApplicationWindow {
     // }
 
     PlayerPositiong{
-        id: settings
-        //visible: false
+        id: positioning1
+        visible: false
+
+        onPositioningDone: {
+            positioning1.visible = false
+            positioning2.visible = true
+        }
+
     }
+
+
+    PlayerPositiong{
+        id: positioning2
+        visible: false
+
+        onPositioningDone: {
+             positioning2.visible = false
+        }
+
+    }
+
 
 }
