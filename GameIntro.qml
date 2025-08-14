@@ -32,6 +32,7 @@ Pane {
 
             background: Rectangle{
                 color: "darkblue"
+                radius: 10
             }
 
             onClicked: {

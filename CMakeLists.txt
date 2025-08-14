@@ -5,11 +5,12 @@ project(NavalBattle VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appNavalBattle
-    main.cpp
+    main.cpp gamecontroller.h gamecontroller.cpp
 )
 
 qt_add_qml_module(appNavalBattle
@@ -21,6 +22,8 @@ qt_add_qml_module(appNavalBattle
         QML_FILES GameBoard.qml
         QML_FILES GameIntro.qml
         QML_FILES PlayerPositiong.qml
+        SOURCES gamecontroller.h gamecontroller.cpp
+        QML_FILES LocalGameplay.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -37,6 +40,7 @@ set_target_properties(appNavalBattle PROPERTIES
 target_link_libraries(appNavalBattle
     PRIVATE Qt6::Quick
 )
+target_link_libraries(appNavalBattle PRIVATE Qt6::Core)
 
 include(GNUInstallDirs)
 install(TARGETS appNavalBattle

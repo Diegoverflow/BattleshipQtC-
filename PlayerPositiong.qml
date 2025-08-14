@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
+import NavalBattle
 
 Pane {
     
@@ -11,6 +12,8 @@ Pane {
 
     background: null
 
+    required property GameController controller
+
     property bool positiong: true
     //property bool lastPositionIsCorrect: false
     property var selectedShipContour: null
@@ -18,7 +21,7 @@ Pane {
     property int totNumOfPieces: 11
         //aircraftCarrier.numOfPieces + battleship.numOfPieces + cruiser.numOfPieces + destroyer.numOfPieces + submarine.numOfPieces
 
-    property var boardOfPositioning
+    property GameController boardOfPositioning
     
 
     signal positioningDone()
@@ -222,7 +225,7 @@ Pane {
 
                     onClicked: {
                         console.log("Save")
-                        gameBoard.swithAttackingMode()
+                        gameBoard.save()
                         root.positioningDone()
                     }
 
@@ -259,6 +262,8 @@ Pane {
             width: 450
             anchors.left: commmands.right
 
+            controller: root.controller
+
             onCorrectPositiong: {
                 root.selectedShip.numOfPieces = root.selectedShip.numOfPieces - 1
                 root.totNumOfPieces -= 1
@@ -289,7 +294,7 @@ Pane {
                 width: root.width
                 height: 76
 
-                text: "To place a ship, select one with the correspondig button under its name,\nthen click on the board the first and the last square where you want your ship to be.\nClick the \"Save\" button under the ships when you finish all the available pieces."
+                text: "To place a ship, select one with the correspondig button under its name,\nthen click on the board the first and the last square where you want your ship to be.\nClick the \"Save\" button under the ships after you have placed all the available pieces."
                 color: "darkblue"
                 font.pixelSize: 18
 

@@ -1,7 +1,12 @@
 import QtQuick
 import QtQuick.Controls.Basic
+import NavalBattle
+import QtQuick.Layouts
 
 ApplicationWindow {
+
+    id: root
+
     width: 750
     height: width
     visible: true
@@ -17,38 +22,46 @@ ApplicationWindow {
         id: gameIntro
 
         onStartPlay: {
-            positioning1.visible = true
+            locGame.firstPositionIsVisible = true
+            locGame.visible = true
         }
 
     }
 
-    // GameBoard{
-    //     id: gameBoard
-    //     //visible: false
-    //     width: 350
-    // }
+    LocalGameplay{
+        id: locGame
 
-    PlayerPositiong{
-        id: positioning1
         visible: false
-
-        onPositioningDone: {
-            positioning1.visible = false
-            positioning2.visible = true
-        }
-
     }
 
 
-    PlayerPositiong{
-        id: positioning2
-        visible: false
+    //RowLayout{
 
-        onPositioningDone: {
-             positioning2.visible = false
-        }
+        // width: root.width * 0.85
+        // height: root.height * 0.85
+        // anchors.centerIn: root
 
-    }
+        // GameBoard{
+        //     id: gameBoard
+        //     //visible: false
+
+        //     width: root.width * 0.85
+        //     height: root.height * 0.85
+        //     anchors.verticalCenter: root.width / 2
+
+
+
+        //     controller: GameController{
+        //         id: controller
+        //     }
+
+        //     //width: 500
+        // }
+    //}
+
+
+
+
 
 
 }

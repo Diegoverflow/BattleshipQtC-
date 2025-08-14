@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
+import NavalBattle
 
 Pane {
 
@@ -17,6 +18,8 @@ Pane {
     Layout.fillHeight: true
     //Layout.alignment: Qt.AlignVCenter
 
+    required property GameController controller
+
     property int lastClicked_X: -1
     property int lastClicked_Y: -1
 
@@ -30,14 +33,18 @@ Pane {
     signal positionError(string error)
     signal correctPositiong()
 
+    //signal lastAttackWasHit()
+
     property var cells: ({})
 
-    function swithAttackingMode(){
+    function save(){
         for(var key in shipsPositions){
             console.log("key -> " + key)
             if (shipsPositions[key].color.toString() !== "#00000000"){
-                cells[key].containShip = true
-                shipsPositions[key].color = "transparent"
+                //cells[key].containShip = true
+                //shipsPositions[key].color = "transparent"
+                controller.addPlayerShips(key)
+                console.log("saving pos: " + key)
             }
         }
     }
@@ -231,14 +238,24 @@ Pane {
 
             MouseArea{
                 anchors.fill: cellArea
+
                 onClicked: {
 
                     if (!root.attackingPhase){
                         cellArea.positioningMode()
+                    } else {
+                        let x_string = xx.toString()
+                        let y_string = yy.toString()
+                        let key = x_string + "&" + y_string
+                        controller.attackOn(key)
+                        if (controller.lastAttackWasHit){
+                            shipsPositions[key].color = "red"
+                        }
                     }
 
-
                 }
+
+
             }
 
             Rectangle {
