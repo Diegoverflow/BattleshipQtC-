@@ -33,7 +33,7 @@ Pane {
     signal positionError(string error)
     signal correctPositiong()
 
-    //signal lastAttackWasHit()
+    property bool attackLaunched: false
 
     property var cells: ({})
 
@@ -241,16 +241,37 @@ Pane {
 
                 onClicked: {
 
+
                     if (!root.attackingPhase){
                         cellArea.positioningMode()
                     } else {
+
+                        if(root.attackLaunched){
+                            console.log("attack already launched")
+                            return
+                        }
+
                         let x_string = xx.toString()
                         let y_string = yy.toString()
                         let key = x_string + "&" + y_string
+
+                        if(shipsPositions[key].color.toString() === "#ff0000"
+                                || shipsPositions[key].color.toString() === "#ffffff") {
+                            console.log("you cannot attack the same position twice")
+                            return
+                        }
+
                         controller.attackOn(key)
                         if (controller.lastAttackWasHit){
                             shipsPositions[key].color = "red"
+                            console.log("red code --> " + shipsPositions[key].color.toString())
+                        } else {
+                            shipsPositions[key].color = "white"
+                            console.log("white code --> " + shipsPositions[key].color.toString())
                         }
+
+                        root.attackLaunched = true
+
                     }
 
                 }

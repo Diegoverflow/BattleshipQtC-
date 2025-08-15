@@ -10,6 +10,7 @@ class GameController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool gameIsRunning READ gameIsRunning WRITE setGameIsRunning NOTIFY gameIsRunningChanged FINAL)
+    Q_PROPERTY(bool firstPlayerTurn READ firstPlayerTurn WRITE setFirstPlayerTurn NOTIFY firstPlayerTurnChanged FINAL)
     Q_PROPERTY(list<string> fisrtPlayerShips READ fisrtPlayerShips /*WRITE setFisrtPlayerShips*/ CONSTANT)
     Q_PROPERTY(list<string> secondPlayerShips READ secondPlayerShips /*WRITE setSecondPlayerShip*/ CONSTANT)
     Q_PROPERTY(bool lastAttackWasHit READ lastAttackWasHit CONSTANT)
@@ -30,9 +31,13 @@ public:
 
     bool lastAttackWasHit() const;
 
-public slots:
+    bool firstPlayerTurn() const;
+
+
+public slots: //non sono slots?
     void addPlayerShips(QString position);
     void attackOn(QString position);
+    void setFirstPlayerTurn(bool newFirstPlayerTurn);
     //void shipHit(QString message);
 
 private:
@@ -41,7 +46,9 @@ private:
 signals:
     //void fisrtPlayerShipsChanged();
     void gameIsRunningChanged(QString message);
-    void shipHit(QString message);
+    void attackDone();
+
+    void firstPlayerTurnChanged();
 
 private:
     list<string> m_fisrtPlayerShips;

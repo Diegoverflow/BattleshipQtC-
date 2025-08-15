@@ -27,10 +27,15 @@ void GameController::addPlayerShips(QString position)
 {
     if (_firstPlayerTurn){
         m_fisrtPlayerShips.push_front(position.toStdString());
+        if (m_fisrtPlayerShips.size() == 25){
+            _firstPlayerTurn = !_firstPlayerTurn;
+        }
     } else{
         m_secondPlayerShips.push_front(position.toStdString());
+        if (m_secondPlayerShips.size() == 25){
+            _firstPlayerTurn = !_firstPlayerTurn;
+        }
     }
-    _firstPlayerTurn = !_firstPlayerTurn;
 }
 
 // void GameController::setSecondPlayerShip(const list<string> &newSecondPlayerShip)
@@ -60,7 +65,7 @@ void GameController::attackOn(QString position)
             _firstPlayerMissingHitsToWin -= 1;
             //emit this->shipHit(position);
             if(_firstPlayerMissingHitsToWin == 0){
-                //emit this->gameIsRunningChanged("first player is the winner");
+                emit this->gameIsRunningChanged("first player is the winner");
                 setGameIsRunning(false);
             }
         }
@@ -69,13 +74,13 @@ void GameController::attackOn(QString position)
             _secondPlayerMissingHitsToWin -= 1;
             //emit this->shipHit(position);
             if(_secondPlayerMissingHitsToWin == 0){
-                //emit this->gameIsRunningChanged("second player is the winner");
+                emit this->gameIsRunningChanged("second player is the winner");
                 setGameIsRunning(false);
             }
         }
     }
-    //setGameIsRunning(false);
-    _firstPlayerTurn = !_firstPlayerTurn;
+    this->setFirstPlayerTurn(!this->_firstPlayerTurn);
+    emit this->attackDone();
 }
 
 bool GameController::attackIssuccessful(string attackCoords, list<string> attackedShips)
@@ -93,4 +98,17 @@ bool GameController::attackIssuccessful(string attackCoords, list<string> attack
 bool GameController::lastAttackWasHit() const
 {
     return m_lastAttackWasHit;
+}
+
+bool GameController::firstPlayerTurn() const
+{
+    return _firstPlayerTurn;
+}
+
+void GameController::setFirstPlayerTurn(bool newFirstPlayerTurn)
+{
+    if (_firstPlayerTurn == newFirstPlayerTurn)
+        return;
+    _firstPlayerTurn = newFirstPlayerTurn;
+    emit firstPlayerTurnChanged();
 }
