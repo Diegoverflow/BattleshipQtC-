@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls.Basic
 import NavalBattle
+import QtQuick.Layouts
 
 Pane {
 
@@ -11,49 +12,42 @@ Pane {
 
     property bool firstPositionIsVisible: false
 
-
-    GameController{
+    GameController {
 
         id: gameController
 
-        onGameIsRunningChanged: (winner) => {
-                                    console.log(winner)
+        onGameIsRunningChanged: winner => {
+                                    messages.text = winner
                                 }
 
         onAttackDone: {
 
-            if(gameController.firstPlayerTurn){
+            if (!gameController.firstPlayerTurn) {
                 passTurnTo2.enabled = true
-
             }
-            if(!gameController.firstPlayerTurn){
+            if (gameController.firstPlayerTurn) {
                 passTurnTo1.enabled = true
             }
 
             console.log("attack done")
         }
-
-
     }
 
 
-
-    PlayerPositiong{
+    PlayerPositiong {
         id: positioning1
         visible: firstPositionIsVisible
 
         controller: gameController
 
-
         onPositioningDone: {
             positioning1.visible = false
             positioning2.visible = true
+            console.log("first player turn -> " + gameController.firstPlayerTurn)
         }
-
     }
 
-
-    PlayerPositiong{
+    PlayerPositiong {
         id: positioning2
         visible: false
 
@@ -64,34 +58,34 @@ Pane {
             attackBoard1.visible = true
             console.log("first player turn -> " + gameController.firstPlayerTurn)
         }
-
-
-
     }
 
 
 
-    GameBoard{
+    GameBoard {
         id: attackBoard1
 
         controller: gameController
         attackingPhase: true
         attackLaunched: false
 
-
         visible: false
 
-        Label{
+        // Label {
 
-            x: 100
-            y: 600
+        //     x: 100
+        //     y: 600
 
-            visible: attackBoard1.visible
+        //     visible: attackBoard1.visible
 
-            text: "---> 1"
-        }
+        //     text: "---> 1"
+        // }
 
-        Button{
+        onAttackError: (error) => {
+                            messages.text = error
+                       }
+
+        Button {
 
             id: passTurnTo2
 
@@ -99,16 +93,20 @@ Pane {
             y: x
 
             //anchors.topMargin: attackBoard1.bottom
-
             width: 100
             height: 50
 
-            background: Rectangle{
+            background: Rectangle {
                 color: "blue"
                 anchors.fill: parent
+                radius: 10
             }
 
+            palette.buttonText: "white"
+
             text: "pass turn"
+
+
 
             enabled: false
 
@@ -119,22 +117,14 @@ Pane {
                 attackBoard2.visible = true
                 attackBoard1.visible = false
                 attackBoard2.attackLaunched = false
+                messages.text = attackBoard1.visible ? "Player 1" : "Player 2"
                 console.log("passing turn - switch to game board 2")
             }
-
-
         }
-
     }
 
-
-
-
-
-    GameBoard{
+    GameBoard {
         id: attackBoard2
-
-
 
         controller: gameController
         attackingPhase: true
@@ -142,31 +132,38 @@ Pane {
 
         visible: false
 
-        Label{
+        // Label {
 
-            x: 100
-            y: 600
+        //     x: 100
+        //     y: 600
 
-            visible: attackBoard2.visible
+        //     visible: attackBoard2.visible
 
-            text: "---> 2"
-        }
+        //     text: "---> 2"
+        // }
 
-        Button{
+        onAttackError: (error) => {
+                            messages.text = error
+                       }
+
+        Button {
 
             id: passTurnTo1
 
             x: 600
             y: x
-            //anchors.topMargin: attackBoard2.bottom
 
+            //anchors.topMargin: attackBoard2.bottom
             width: 100
             height: 50
 
-            background: Rectangle{
+            background: Rectangle {
                 color: "blue"
                 anchors.fill: parent
+                radius: 10
             }
+
+            palette.buttonText: "white"
 
             text: "pass turn"
 
@@ -179,15 +176,38 @@ Pane {
                 attackBoard1.attackLaunched = false
                 passTurnTo1.enabled = false
                 attackBoard2.visible = false
+                messages.text = attackBoard1.visible ? "Player 1" : "Player 2"
                 console.log("passing turn - switch to game board 1")
             }
-
         }
-
     }
 
 
 
+    //RowLayout {
+        Label {
+            id: messages
 
+            anchors.top: attackBoard1.bottom
+            anchors.topMargin: 60
 
+            visible: attackBoard1.visible || attackBoard2.visible ? true : false
+
+            width: attackBoard1.width
+            height: 24
+
+            text: attackBoard1.visible ? "Player 1" : "Player 2"
+            color: "darkblue"
+            font.pixelSize: 18
+
+            Layout.fillWidth: true
+
+            background: Rectangle {
+                anchors.fill: parent
+                color: "lightblue"
+                opacity: 0.5
+                radius: 10
+            }
+        }
+    //}
 }

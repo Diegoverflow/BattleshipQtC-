@@ -33,6 +33,8 @@ Pane {
     signal positionError(string error)
     signal correctPositiong()
 
+    signal attackError(string error)
+
     property bool attackLaunched: false
 
     property var cells: ({})
@@ -61,7 +63,8 @@ Pane {
         property alias checkText: check.text
         property int xx
         property int yy 
-        property bool containShip: false //SI PUO' TOGLIERE
+
+        //property bool containShip: false --> SI PUO' TOGLIERE
 
         Rectangle{
             id: cellArea
@@ -240,43 +243,44 @@ Pane {
                 anchors.fill: cellArea
 
                 onClicked: {
-
-
                     if (!root.attackingPhase){
                         cellArea.positioningMode()
                     } else {
-
-                        if(root.attackLaunched){
-                            console.log("attack already launched")
-                            return
-                        }
-
-                        let x_string = xx.toString()
-                        let y_string = yy.toString()
-                        let key = x_string + "&" + y_string
-
-                        if(shipsPositions[key].color.toString() === "#ff0000"
-                                || shipsPositions[key].color.toString() === "#ffffff") {
-                            console.log("you cannot attack the same position twice")
-                            return
-                        }
-
-                        controller.attackOn(key)
-                        if (controller.lastAttackWasHit){
-                            shipsPositions[key].color = "red"
-                            console.log("red code --> " + shipsPositions[key].color.toString())
-                        } else {
-                            shipsPositions[key].color = "white"
-                            console.log("white code --> " + shipsPositions[key].color.toString())
-                        }
-
-                        root.attackLaunched = true
-
+                        cellArea.attackingMode()
                     }
-
                 }
 
+            }
 
+            function attackingMode(){
+
+                    if(root.attackLaunched){
+                        root.attackError("attack already launched")
+                        console.log("One attack has been already launched...")
+                        return
+                    }
+
+                    let x_string = xx.toString()
+                    let y_string = yy.toString()
+                    let key = x_string + "&" + y_string
+
+                    if(shipsPositions[key].color.toString() === "#ff0000"
+                            || shipsPositions[key].color.toString() === "#ffffff") {
+                        root.attackError("you cannot attack the same position twice")
+                        console.log("You cannot attack the same position twice!")
+                        return
+                    }
+
+                    controller.attackOn(key)
+                    if (controller.lastAttackWasHit){
+                        shipsPositions[key].color = "red"
+                        console.log("red code --> " + shipsPositions[key].color.toString())
+                    } else {
+                        shipsPositions[key].color = "white"
+                        console.log("white code --> " + shipsPositions[key].color.toString())
+                    }
+
+                    root.attackLaunched = true
             }
 
             Rectangle {

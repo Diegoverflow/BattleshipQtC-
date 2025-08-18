@@ -56,7 +56,7 @@ private:
     bool m_gameIsRunning;
     int _firstPlayerMissingHitsToWin = 25;
     int _secondPlayerMissingHitsToWin = 25;
-    bool _firstPlayerTurn = false;
+    bool _firstPlayerTurn = true;
     bool m_lastAttackWasHit = false;
 };
 
